@@ -18,6 +18,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        //chart는 아직 미구현되어있습니다. 작동하지 않는 소스코드입니다.
         var chart: LineChart
 
         chart = binding.chart
