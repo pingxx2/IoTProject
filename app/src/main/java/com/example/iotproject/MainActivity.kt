@@ -11,43 +11,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-const val SUB_TOPIC = "dev/#"
-const val PUB_TOPIC = ""
-const val SERVER_URI = "tcp://192.168.0.30:1883"
 
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
-    //mqtt
-    val TAG = "MqttActivity"
-    lateinit var mqttClient: Mqtt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //mqtt
-        mqttClient = Mqtt(this, SERVER_URI)
-        try {
-            // mqttClient.setCallback { topic, message ->}
-            mqttClient.setCallback(::onReceived)
-            mqttClient.connect(arrayOf<String>(SUB_TOPIC))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
         //Tab과 ViewPager2 연결
         initViewPager()
 
-    }
-
-    fun onReceived(topic: String, message: MqttMessage) {
-        // 토픽 수신 처리
-        //val msg = String(message.payload)
-    }
-    fun publish() {
-        //mqttClient.publish(PUB_TOPIC, "1")
     }
 
     private fun initViewPager(){

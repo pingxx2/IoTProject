@@ -22,9 +22,6 @@ class TabHomeFragment : Fragment() {
     var humi_value: Int = 0
     var dust_value: Int = 0
 
-    //mqtt
-    val TAG = "MqttActivity"
-    lateinit var mqttClient: Mqtt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,15 +30,6 @@ class TabHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //mqtt 설정
-        mqttClient = Mqtt(requireContext(), SERVER_URI)
-        try {
-            // mqttClient.setCallback { topic, message ->}
-            mqttClient.setCallback(::onReceived)
-            mqttClient.connect(arrayOf<String>(SUB_TOPIC))
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
 
         // 기본정보상세보기 -> 그래프 이동
         binding.btnDetailHome.setOnClickListener{
@@ -80,13 +68,5 @@ class TabHomeFragment : Fragment() {
         return binding.root
     }
 
-    fun onReceived(topic: String, message: MqttMessage) {
-        // 토픽 수신 처리
-        //val msg = String(message.payload)
-    }
-    fun publish() {
-        //토픽 송신 처리
-        //mqttClient.publish(PUB_TOPIC, "1")
-    }
 
 }
