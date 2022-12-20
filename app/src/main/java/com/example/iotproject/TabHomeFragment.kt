@@ -3,6 +3,7 @@ package com.example.iotproject
 
 import android.content.Intent
 import android.app.TabActivity
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -49,11 +50,11 @@ class TabHomeFragment : Fragment() {
         //미세먼지 색상 변경
         val roundDrawable = resources.getDrawable(R.drawable.btn_dust_circle)
 
-        var dust_color = if(dust_value in 0..30) -13676321 // 좋음 : 파란색
-        else if(dust_value in 31..80) -12213470            // 보통 : 초록색
-        else if(dust_value in 81..150) -360658             // 나쁨 : 주황색
-        else if(dust_value >151) -1434082                        // 매우나쁨 : 빨간색
-        else -16777216                                           // 에러 : 검정색
+        var dust_color = if(dust_value in 0..30) Color.parseColor("#2F50DF") // 좋음 : 파란색
+        else if(dust_value in 31..80) Color.parseColor("#45A322")            // 보통 : 초록색
+        else if(dust_value in 81..150) Color.parseColor("#FA7F2E")             // 나쁨 : 주황색
+        else if(dust_value >151) Color.parseColor("#EA1E1E")                        // 매우나쁨 : 빨간색
+        else Color.parseColor("#000000")                                          // 에러 : 검정색
 
         roundDrawable.setColorFilter(dust_color, PorterDuff.Mode.SRC_ATOP)
         binding.imgDustHome.background = roundDrawable
