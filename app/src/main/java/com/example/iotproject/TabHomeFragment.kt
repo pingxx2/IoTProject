@@ -68,5 +68,8 @@ class TabHomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun colorFormat(color: Int){
+        //
+    }
 
 }
