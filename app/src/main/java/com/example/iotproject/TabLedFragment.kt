@@ -18,12 +18,57 @@ class TabLedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //전원
-        binding.switchLed.setOnCheckedChangeListener{ p, isChecked ->
+        //전체 조명
+        binding.switchEntireLed.setOnCheckedChangeListener{ p, isChecked ->
             if(isChecked){
-                // LED ON
+                // 전체 조명 ON
             } else{
-                // LED OFF
+                // 전체 조명 OFF
+            }
+        }
+
+        //거실 조명
+        binding.switchLivingLed.setOnCheckedChangeListener{ p, isChecked ->
+            if(isChecked){
+                // 거실 조명 ON
+            } else{
+                // 거실 조명 OFF
+            }
+        }
+
+        //화장실 조명
+        binding.switchBathLed.setOnCheckedChangeListener{ p, isChecked ->
+            if(isChecked){
+                // 화장실 조명 ON
+            } else{
+                // 화장실 조명 OFF
+            }
+        }
+
+        //방1 조명
+        binding.switchRoom1Led.setOnCheckedChangeListener{ p, isChecked ->
+            if(isChecked){
+                // 방1 조명 ON
+            } else{
+                // 방1 조명 OFF
+            }
+        }
+
+        //방2 조명
+        binding.switchRoom2Led.setOnCheckedChangeListener{ p, isChecked ->
+            if(isChecked){
+                // 방2 조명 ON
+            } else{
+                // 방2 조명 OFF
+            }
+        }
+
+        //방3 조명
+        binding.switchRoom3Led.setOnCheckedChangeListener{ p, isChecked ->
+            if(isChecked){
+                // 방3 조명 ON
+            } else{
+                // 방3 조명 OFF
             }
         }
     }
