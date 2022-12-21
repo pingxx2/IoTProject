@@ -23,47 +23,35 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        //초기화
-        var lineChart: LineChart = binding.chart
+        chart_init(binding.chart1Detail,"온도", Color.RED, data_temp())
+        chart_init(binding.chart2Detail, "습도", Color.BLUE, data_temp())
+        chart_init(binding.chart3Detail, "미세먼지", Color.GREEN, data_temp())
+
+    }
+
+    //chart 설정 (binding할 차트, 차트 이름, 차트 색상, 차트 데이터)
+    private fun chart_init(lineChart: LineChart,chartName: String, chartColor: Int, chartData: ArrayList<Entry>){
 
         //1. 데이터셋에 데이터 넣기
-        var tempDataSet = LineDataSet(data1(), "temp")
+        var tempDataSet = LineDataSet(chartData, chartName)
         //1-A. 데이터셋 커스텀
-        tempDataSet.setColor(Color.RED) //라인 색상
+        tempDataSet.setColor(chartColor) //라인 색상
         tempDataSet.setLineWidth(2f) //라인 굵기
         tempDataSet.setDrawCircleHole(true) //데이터 원 표시 여부
-        tempDataSet.setCircleColor(Color.RED) //데이터 원 색상
+        tempDataSet.setCircleColor(chartColor) //데이터 원 색상
         tempDataSet.setCircleRadius(2f) // 데이터 원 반지름
+
+        //1-B. 차트 커스텀
+        lineChart.setNoDataText("No Data"); //차트 데이터 없음 표시
+        lineChart.setNoDataTextColor(Color.BLACK); //차트 데이터 없음 텍스트 색상
+        //lineChart.setBackgroundColor(Color.BLACK); //차트 배경 색상
+        //lineChart.setDrawGridBackground(true); //격자 그리드 적용
+        //lineChart.setDrawBorders(true); //차트 외곽선 진하게
+        //lineChart.setBorderColor(Color.RED); //차트 외곽선 색상
 
         //2. 리스트에 데이터셋 추가
         val dataSets: ArrayList<ILineDataSet> = ArrayList()
         dataSets.add(tempDataSet)
-
-        /* 차트 스타일 */
-
-        //차트 배경 색상
-        //lineChart.setBackgroundColor(Color.BLACK);
-
-        //차트 데이터 없음 표시
-        lineChart.setNoDataText("No Data");
-
-        //차트 데이터 없음 텍스트 색상
-        lineChart.setNoDataTextColor(Color.BLUE);
-
-        //격자 그리드 적용
-        //lineChart.setDrawGridBackground(true);
-
-        //차트 외곽선 진하게
-        //lineChart.setDrawBorders(true);
-
-        //차트 외곽선 색상
-        //lineChart.setBorderColor(Color.RED);
-
-        //설명
-        var description : Description = lineChart.description
-        description.setText("") // 설명
-        description.setTextSize(10f) //설명 텍스트 크기
-        description.setTextColor(Color.BLACK) //텍스트 색상
 
         //3. 라인데이터에 리스트 추가
         val data = LineData(dataSets)
@@ -75,8 +63,8 @@ class DetailActivity : AppCompatActivity() {
         lineChart.invalidate();
     }
 
-    //데이터 생성
-    private fun data1(): ArrayList<Entry> {
+    // temp 데이터 생성
+    private fun data_temp(): ArrayList<Entry> {
         val dataList: ArrayList<Entry> = ArrayList()
         dataList.add(Entry(0f, 10f))
         dataList.add(Entry(1f, 20f))
