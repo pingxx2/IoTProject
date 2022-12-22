@@ -10,7 +10,6 @@ import com.example.iotproject.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 class MainActivity : AppCompatActivity() {

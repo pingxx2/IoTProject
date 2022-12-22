@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import com.example.iotproject.databinding.FragmentTabLightBinding
-import org.eclipse.paho.client.mqttv3.internal.security.SSLSocketFactoryFactory.toByte
 import yuku.ambilwarna.AmbilWarnaDialog
 import kotlin.experimental.inv
 import kotlin.experimental.or
