@@ -3,8 +3,9 @@ package com.example.iotproject.data
 import com.google.gson.annotations.SerializedName
 
 
-data class data(
+data class SensorData(
     @SerializedName("Device Name")
     val deviceName: String,
-    val Value: String
+    @SerializedName("Value")
+    val value: String
 )

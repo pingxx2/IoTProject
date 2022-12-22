@@ -73,6 +73,7 @@
         app:layout_constraintStart_toStartOf="@+id/imgBack1_cctv"
         app:layout_constraintTop_toBottomOf="@+id/txtVideo_cctv" />
 
+
     <TextView
         android:id="@+id/txtDate_cctv"
         android:layout_width="wrap_content"

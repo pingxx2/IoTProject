@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.iotproject.data.data
+import com.example.iotproject.data.SensorData
 import com.example.iotproject.databinding.FragmentTabHomeBinding
 import com.example.iotproject.service.APISensor
 import retrofit2.Call
@@ -56,11 +56,8 @@ class TabHomeFragment : Fragment() {
         //val intent =   Intent(requireContext(), MyService::class.java)
         //requireActivity().stopService(intent)
 
-        //온도 값 변경
-        binding.tempHome.setText(temp_value.toString()+"℃")
-
-        //습도 값 변경
-        binding.humiHome.setText(humi_value.toString()+"%")
+        //온도, 습도 값 변경
+        getSensorData()
 
         //미세먼지 값 변경
         binding.dustHome.setText(dust_value.toString()+"㎍/m³")
@@ -77,27 +74,6 @@ class TabHomeFragment : Fragment() {
         roundDrawable.setColorFilter(dust_color, PorterDuff.Mode.SRC_ATOP)
         binding.imgDustHome.background = roundDrawable
 
-        //retrofit2
-        val deviceName = "TEMP"
-        val callGetData = APISensor.getService().getData(deviceName)
-
-        callGetData.enqueue(object : Callback<data>{
-            override fun onResponse(call: Call<data>, response: Response<data>) {
-                //성공
-                if(response.isSuccessful()){
-                    binding.tempHome.setText(response.body()!!.Value.toString())
-                    Log.d("RETRO",response.body()!!.Value.toString())
-                } else{
-                    //실패
-                }
-            }
-
-            override fun onFailure(call: Call<data>, t: Throwable) {
-                //실패
-                Log.e("RETRO", t.toString())
-            }
-        })
-
     }
 
     override fun onCreateView(
@@ -109,8 +85,39 @@ class TabHomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun colorFormat(color: Int){
-        //
+    private fun getSensorData(){
+        // 온도를 가져옴
+        APISensor.getService()
+            .getTemp()
+            .enqueue(object : Callback<SensorData> {
+                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
+                    if(response.isSuccessful){
+                        val data = response.body()
+                        binding.tempHome.text = data?.value + "℃"
+                    }
+                }
+
+                override fun onFailure(call: Call<SensorData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
+
+        // 습도를 가져옴
+        APISensor.getService()
+            .getHumi()
+            .enqueue(object : Callback<SensorData> {
+                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
+                    if(response.isSuccessful){
+                        val data = response.body()
+                        binding.humiHome.text = data?.value + "%"
+                    }
+                }
+
+                override fun onFailure(call: Call<SensorData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
+
     }
 
 
