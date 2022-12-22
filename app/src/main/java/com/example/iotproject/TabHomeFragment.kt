@@ -2,17 +2,20 @@ package com.example.iotproject
 
 
 import android.content.Intent
-import android.app.TabActivity
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
+import com.example.iotproject.data.data
 import com.example.iotproject.databinding.FragmentTabHomeBinding
-import org.eclipse.paho.client.mqttv3.MqttMessage
+import com.example.iotproject.service.APISensor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class TabHomeFragment : Fragment() {
@@ -73,6 +76,28 @@ class TabHomeFragment : Fragment() {
 
         roundDrawable.setColorFilter(dust_color, PorterDuff.Mode.SRC_ATOP)
         binding.imgDustHome.background = roundDrawable
+
+        //retrofit2
+        val deviceName = "TEMP"
+        val callGetData = APISensor.getService().getData(deviceName)
+
+        callGetData.enqueue(object : Callback<data>{
+            override fun onResponse(call: Call<data>, response: Response<data>) {
+                //성공
+                if(response.isSuccessful()){
+                    binding.tempHome.setText(response.body()!!.Value.toString())
+                    Log.d("RETRO",response.body()!!.Value.toString())
+                } else{
+                    //실패
+                }
+            }
+
+            override fun onFailure(call: Call<data>, t: Throwable) {
+                //실패
+                Log.e("RETRO", t.toString())
+            }
+        })
+
     }
 
     override fun onCreateView(
@@ -87,5 +112,6 @@ class TabHomeFragment : Fragment() {
     private fun colorFormat(color: Int){
         //
     }
+
 
 }
