@@ -38,6 +38,21 @@ class TabHomeFragment : Fragment() {
             startActivity(intent_base)
         }
 
+        //TEST : 버튼 클릭 -> 화재발생 알람 띄우기
+        binding.btnNoti.setOnClickListener{
+            //화재가 감지되면 알람 발생
+            val intent =   Intent(requireContext(), MyService::class.java)
+            requireActivity().startService(intent)
+        }
+
+        // if 화재발생
+        //val intent =   Intent(requireContext(), MyService::class.java)
+        //requireActivity().startService(intent)
+
+        // else if 화재종료
+        //val intent =   Intent(requireContext(), MyService::class.java)
+        //requireActivity().stopService(intent)
+
         //온도 값 변경
         binding.tempHome.setText(temp_value.toString()+"℃")
 
