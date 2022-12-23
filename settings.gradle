@@ -28,3 +28,4 @@ buildscript {
 
 rootProject.name = "IoTProject"
 include ':app'
+include ':mjpeg-view'

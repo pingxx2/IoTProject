@@ -88,7 +88,7 @@ class TabHomeFragment : Fragment() {
     private fun getSensorData(){
         // 온도를 가져옴
         APISensor.getService()
-            .getTemp()
+            .getSensorValue("TEMP")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
@@ -96,15 +96,13 @@ class TabHomeFragment : Fragment() {
                         binding.tempHome.text = data?.value + "℃"
                     }
                 }
-
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {
                     Log.i("isWorking?", "Fail...")
                 }
             })
-
         // 습도를 가져옴
         APISensor.getService()
-            .getHumi()
+            .getSensorValue("HUMI")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
@@ -112,13 +110,9 @@ class TabHomeFragment : Fragment() {
                         binding.humiHome.text = data?.value + "%"
                     }
                 }
-
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {
                     Log.i("isWorking?", "Fail...")
                 }
             })
-
     }
-
-
 }

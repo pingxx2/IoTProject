@@ -1,22 +1,28 @@
 package com.example.iotproject
 
-import android.net.Uri
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.VideoView
+import android.webkit.WebSettings
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.load.model.stream.HttpGlideUrlLoader.TIMEOUT
 import com.example.iotproject.databinding.FragmentTabCctvBinding
-import kotlinx.coroutines.NonCancellable.start
+import com.github.niqdev.mjpeg.DisplayMode
+import com.github.niqdev.mjpeg.Mjpeg
+import com.github.niqdev.mjpeg.MjpegInputStream
+import com.github.niqdev.mjpeg.MjpegView
+import android.webkit.WebViewClient;
 
 
 class TabCctvFragment : Fragment() {
     private var _binding: FragmentTabCctvBinding? = null
     private val binding get()= _binding!!
 
-    // uri 변수 = 예시링크
-    var cctvUri: String = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+    val cctv_url = "http://192.168.35.213:8000/mjpeg/?mode=stream"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,24 +31,29 @@ class TabCctvFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //cctv 재생 링크 설정
-        val videoUri: Uri = Uri.parse(cctvUri)
+        var  mWebSettings: WebSettings = binding.wv.settings;
+        //web view를 이용하여 cctv streaming 연결
+        binding.wv.setWebViewClient(WebViewClient())
+        mWebSettings.javaScriptEnabled = true //자바스크립트 허용
+        mWebSettings.setSupportMultipleWindows(false) //새 창 띄우기 비허용
+        mWebSettings.javaScriptCanOpenWindowsAutomatically = false // 멀티 뷰 비허용
+        mWebSettings.loadWithOverviewMode = true //메타태그 허용
+        mWebSettings.useWideViewPort = true //화면 사이즈 맞추기 허용
+        mWebSettings.setSupportZoom(false) //화면 줌 비허용
+        mWebSettings.builtInZoomControls = false //화면 확대 축소 비허용
+        mWebSettings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN //컨텐츠 사이즈 맞추기
+        mWebSettings.cacheMode = WebSettings.LOAD_NO_CACHE //브라우저 캐시 비허용
+        mWebSettings.domStorageEnabled = true //로컬저장소 허용
 
-        //videoView와 연결할 uri 설정
-        binding.videoViewCctv.setVideoURI(videoUri)
+        binding.wv.loadUrl(cctv_url) //cctv stream 주소
 
-        //비디오 로딩 준비가 끝났을 때 실행하도록 리스너 설정
-        binding.videoViewCctv.setOnPreparedListener {
-            //비디오 시작
-            binding.videoViewCctv.start()
-        }
+
     }
+
 
     //화면에 안보일 때 = 다른 탭으로 이동했을 때
      override fun onPause() {
         super.onPause()
-        //비디오 일시 정지
-        if (binding.videoViewCctv != null && binding.videoViewCctv.isPlaying) binding.videoViewCctv.pause()
     }
 
     override fun onCreateView(
