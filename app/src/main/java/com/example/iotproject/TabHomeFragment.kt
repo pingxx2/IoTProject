@@ -42,11 +42,11 @@ class TabHomeFragment : Fragment() {
         }
 
         //TEST : 버튼 클릭 -> 화재발생 알람 띄우기
-        binding.btnNoti.setOnClickListener{
+        //binding.btnNoti.setOnClickListener{
             //화재가 감지되면 알람 발생
-            val intent =   Intent(requireContext(), MyService::class.java)
-            requireActivity().startService(intent)
-        }
+        val intent =   Intent(requireContext(), MyService::class.java)
+        requireActivity().startService(intent)
+        //}
 
         // if 화재발생
         //val intent =   Intent(requireContext(), MyService::class.java)
