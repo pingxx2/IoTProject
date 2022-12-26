@@ -6,7 +6,9 @@ import android.app.Service
 import android.app.Service.START_REDELIVER_INTENT
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.iotproject.data.SensorData
@@ -14,34 +16,48 @@ import com.example.iotproject.service.APISensor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import kotlin.concurrent.timer
 
 class MyService : Service() {
 
+    //처음 실행
     override fun onCreate() {
         super.onCreate()
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        //화재가 감지되면 알람을 울림
-        if(getFlameData()=="true"){
-            // notification channel 설정
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                val name = "화재 감지 알람"
-                val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val notificationChannel = NotificationChannel("CHANNEL_ID", name, importance)
+        var latestValue: Int = 1
+        var currentValue: Int = 0
+        var contentText: String = ""
 
-                notificationManager.createNotificationChannel(notificationChannel)
+        //5초마다 센서 값 확인 후 텍스트 변경하기
+        var timer = timer(period = 5000, initialDelay = 1000){
+            // notification channel 설정
+            if(getFlameData()=="1"){ //화재가 감지되면 화재발생 문구 출력 및 현재 값 1로 변경
+                contentText="화재 발생!!"
+                currentValue = 1
+            } else{ //화재가 감지되지 않으면 화재 감지중... 문구 출력 및 현재 값 0으로 변경
+                contentText="화재 감지중..."
+                currentValue = 0
             }
-            val builder = NotificationCompat.Builder(this@MyService, "CHANNEL_ID")
-                .setSmallIcon(R.drawable.ic_baseline_home_24)
-                .setContentText("화재발생")
-            startForeground(1, builder.build())
-        } else{ // 화재가 감지되지 않으면 알람 취소
-            notificationManager.cancelAll()
+            //최근에 발생한 값과 현재 값이 다르면 센서 상태가 변했으므로 알림 재전송
+            if(latestValue!=currentValue){
+                latestValue=currentValue
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    val name = "화재감지센서 작동 채널"
+                    val importance = NotificationManager.IMPORTANCE_DEFAULT
+                    val notificationChannel = NotificationChannel("foreground channel", name, importance)
+                    val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                    notificationManager.createNotificationChannel(notificationChannel)
+                }
+                val builder = NotificationCompat.Builder(this@MyService, "foreground channel")
+                    .setSmallIcon(R.drawable.ic_baseline_home_24)
+                    .setContentText(contentText)
+                startForeground(1, builder.build())
+            }
         }
     }
-
+    //재실행
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // 서비스 처음 시작
+
         return START_REDELIVER_INTENT
     }
 
@@ -72,4 +88,5 @@ class MyService : Service() {
             })
         return flame_value
     }
+
 }
