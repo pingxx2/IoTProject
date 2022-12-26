@@ -22,8 +22,6 @@ class TabHomeFragment : Fragment() {
     private var _binding: FragmentTabHomeBinding? = null
     private val binding get() = _binding!!
 
-    var temp_value: Float = 0.0f
-    var humi_value: Int = 0
     var dust_value: Int = 0
 
 
@@ -41,26 +39,12 @@ class TabHomeFragment : Fragment() {
             startActivity(intent_base)
         }
 
-        //TEST : 버튼 클릭 -> 화재발생 알람 띄우기
-        //binding.btnNoti.setOnClickListener{
-            //화재가 감지되면 알람 발생
+        //화재가 감지 서비스 작동
         val intent =   Intent(requireContext(), MyService::class.java)
         requireActivity().startService(intent)
-        //}
 
-        // if 화재발생
-        //val intent =   Intent(requireContext(), MyService::class.java)
-        //requireActivity().startService(intent)
-
-        // else if 화재종료
-        //val intent =   Intent(requireContext(), MyService::class.java)
-        //requireActivity().stopService(intent)
-
-        //온도, 습도 값 변경
+        //온도, 습도, 미세먼지 값 변경
         getSensorData()
-
-        //미세먼지 값 변경
-        binding.dustHome.setText(dust_value.toString()+"㎍/m³")
 
         //미세먼지 색상 변경
         val roundDrawable = resources.getDrawable(R.drawable.btn_dust_circle)
@@ -108,6 +92,22 @@ class TabHomeFragment : Fragment() {
                     if(response.isSuccessful){
                         val data = response.body()
                         binding.humiHome.text = data?.value + "%"
+                        dust_value = data?.value!!.toInt()
+                    }
+                }
+                override fun onFailure(call: Call<SensorData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
+
+        //미세먼지 가져옴
+        APISensor.getService()
+            .getSensorValue("DUST")
+            .enqueue(object : Callback<SensorData>{
+                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
+                    if(response.isSuccessful){
+                        val data = response.body()
+                        binding.dustHome.text = data?.value + "㎍/m³"
                     }
                 }
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {
