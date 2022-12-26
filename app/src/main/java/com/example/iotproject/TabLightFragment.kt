@@ -19,6 +19,7 @@ class TabLightFragment : Fragment() {
     private var _binding: FragmentTabLightBinding? = null
     private val binding get() = _binding!!
     var defaultColor : Int = 0
+    var lightValue: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,9 @@ class TabLightFragment : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 // 값이 변할 때
                 binding.txtBrightnessLight.setText(progress.toString())
+
+                //전송할 밝기 값 변경
+                convertValue(1, lightValue, progress.toString())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -75,8 +79,23 @@ class TabLightFragment : Fragment() {
 
                 // 전송할 무드등 색상 값
                 Log.d("COLOR_CONVERT", color_hex)
+
+                //전송할 색상 값 변경
+                convertValue(0, lightValue, color_hex)
             }
         })
         colorPicker.show()
+    }
+
+    fun convertValue(type: Int, lightValue: String, changeValue: String): String{
+        var returnValue: String = ""
+        var splitValue = lightValue.split(":")
+
+        if(type==0){ //색상 값 변경
+            returnValue = changeValue + ":" + splitValue[1]
+        } else if(type==1){ //밝기 값 변경
+            returnValue = splitValue[0] + ":" + changeValue
+        }
+        return returnValue
     }
 }
