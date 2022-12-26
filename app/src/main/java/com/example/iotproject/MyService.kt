@@ -31,7 +31,7 @@ class MyService : Service() {
         //1초마다 센서 값 확인 후 텍스트 변경하기
         var timer = timer(period = 1000, initialDelay = 1000){
             // notification channel 설정
-            if(getFlameData()=="1"){ //화재가 감지되면 화재발생 문구 출력 및 현재 값 1로 변경
+            if(getFlameData()=="True"){ //화재가 감지되면 화재발생 문구 출력 및 현재 값 1로 변경
                 contentText="화재 발생!!"
                 currentValue = 1
             } else{ //화재가 감지되지 않으면 화재 감지중... 문구 출력 및 현재 값 0으로 변경
@@ -74,12 +74,13 @@ class MyService : Service() {
         var flame_value: String = ""
         // 화재 감지 값을 가져옴
         APISensor.getService()
-            .getFlameValue()
+            .getSensorValue("flame_detect")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
                         val data = response.body()
                         flame_value = data?.value!!
+                        Log.i("flame Value : ", "data : " +  flame_value);
                     }
                 }
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {

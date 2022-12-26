@@ -72,7 +72,7 @@ class TabHomeFragment : Fragment() {
     private fun getSensorData(){
         // 온도를 가져옴
         APISensor.getService()
-            .getSensorValue("TEMP")
+            .getSensorValue("TEMP/latest_value")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
@@ -86,13 +86,12 @@ class TabHomeFragment : Fragment() {
             })
         // 습도를 가져옴
         APISensor.getService()
-            .getSensorValue("HUMI")
+            .getSensorValue("HUMI/latest_value")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
                         val data = response.body()
                         binding.humiHome.text = data?.value + "%"
-                        dust_value = data?.value!!.toInt()
                     }
                 }
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {
@@ -102,12 +101,13 @@ class TabHomeFragment : Fragment() {
 
         //미세먼지 가져옴
         APISensor.getService()
-            .getSensorValue("DUST")
+            .getSensorValue("DUST/latest_value")
             .enqueue(object : Callback<SensorData>{
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
                         val data = response.body()
                         binding.dustHome.text = data?.value + "㎍/m³"
+                        dust_value = data?.value!!.toInt()
                     }
                 }
                 override fun onFailure(call: Call<SensorData>, t: Throwable) {
