@@ -14,6 +14,8 @@ private val BASE_URL = "http://192.168.35.114:8000/"
 interface SensorDataService{
     @GET("/data/sensor/{dev}/latest_value")
     fun getSensorValue(@Path("dev") dev: String): Call<SensorData>
+    @GET("/data/sensor/flame_detect")
+    fun getFlameValue(): Call<SensorData>
 }
 
 
