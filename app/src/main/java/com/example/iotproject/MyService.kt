@@ -74,7 +74,7 @@ class MyService : Service() {
         var flame_value: String = ""
         // 화재 감지 값을 가져옴
         APISensor.getService()
-            .getSensorValue("flame_detect")
+            .getSensorValue("FIRE")
             .enqueue(object : Callback<SensorData> {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
