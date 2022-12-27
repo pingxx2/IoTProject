@@ -4,12 +4,14 @@ package com.example.iotproject
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import com.example.iotproject.data.SensorData
 import com.example.iotproject.databinding.FragmentTabHomeBinding
 import com.example.iotproject.service.APISensor
@@ -29,6 +31,7 @@ class TabHomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,7 +44,7 @@ class TabHomeFragment : Fragment() {
 
         //화재가 감지 서비스 작동
         val intent = Intent(requireContext(), MyService::class.java)
-        requireActivity().startService(intent)
+        requireActivity().startForegroundService(intent)
 
         //온도, 습도, 미세먼지 값 변경
         getSensorData()
