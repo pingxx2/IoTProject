@@ -1,19 +1,26 @@
 package com.example.iotproject
 
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.Fragment
+import com.example.iotproject.data.MoodData
+import com.example.iotproject.data.SensorData
 import com.example.iotproject.databinding.FragmentTabLightBinding
+import com.example.iotproject.service.APISensor
+import com.google.gson.GsonBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import yuku.ambilwarna.AmbilWarnaDialog
-import kotlin.experimental.inv
-import kotlin.experimental.or
 import kotlin.math.*
+
 
 class TabLightFragment : Fragment() {
     private var _binding: FragmentTabLightBinding? = null
@@ -40,8 +47,8 @@ class TabLightFragment : Fragment() {
                 // 값이 변할 때
                 binding.txtBrightnessLight.setText(progress.toString())
 
-                //전송할 밝기 값 변경
-                convertValue(1, lightValue, progress.toString())
+                //서버에 변환된 값 전송
+                setSensorData(convertValue(1, lightValue, progress.toString()))
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -54,7 +61,11 @@ class TabLightFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentTabLightBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,8 +91,8 @@ class TabLightFragment : Fragment() {
                 // 전송할 무드등 색상 값
                 Log.d("COLOR_CONVERT", color_hex)
 
-                //전송할 색상 값 변경
-                convertValue(0, lightValue, color_hex)
+                //서버에 변환된 값 전송
+                setSensorData(convertValue(0, lightValue, color_hex))
             }
         })
         colorPicker.show()
@@ -98,4 +109,21 @@ class TabLightFragment : Fragment() {
         }
         return returnValue
     }
+
+    private fun setSensorData(requestValue: String) {
+        // 무드등 값을 보냄
+        APISensor.getService()
+            .setMoodValue(requestValue)
+            .enqueue(object : Callback<MoodData> {
+                override fun onResponse(call: Call<MoodData>, response: Response<MoodData>) {
+                    if (response.isSuccessful) {
+                        val data = response.body()
+                    }
+                }
+                override fun onFailure(call: Call<MoodData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
+    }
+
 }

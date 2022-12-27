@@ -9,3 +9,8 @@ data class SensorData(
     @SerializedName("Value")
     val value: String
 )
+
+data class MoodData(
+    @SerializedName("Value")
+    val value:String
+)

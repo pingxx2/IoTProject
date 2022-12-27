@@ -35,7 +35,6 @@ class TabHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         // 기본정보상세보기 -> 그래프 이동
         binding.btnDetailHome.setOnClickListener{
             val intent_base = Intent(requireContext(), DetailActivity::class.java)
