@@ -40,7 +40,7 @@ class TabHomeFragment : Fragment() {
         }
 
         //화재가 감지 서비스 작동
-        val intent =   Intent(requireContext(), MyService::class.java)
+        val intent = Intent(requireContext(), MyService::class.java)
         requireActivity().startService(intent)
 
         //온도, 습도, 미세먼지 값 변경

@@ -22,7 +22,7 @@ class TabCctvFragment : Fragment() {
     private var _binding: FragmentTabCctvBinding? = null
     private val binding get()= _binding!!
 
-    val cctv_url = "http://192.168.35.213:8000/mjpeg/?mode=stream"
+    val cctv_url = "http://192.168.35.113/mjpeg/?mode=stream"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

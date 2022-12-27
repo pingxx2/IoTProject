@@ -20,11 +20,11 @@ import java.text.SimpleDateFormat
 import kotlin.concurrent.timer
 
 class MyService : Service() {
-
+    var flame_value: String = ""
     //처음 실행
     override fun onCreate() {
         super.onCreate()
-        var latestValue: Int = 1
+        var latestValue: Int = 2
         var currentValue: Int = 0
         var contentText: String = ""
 
@@ -34,6 +34,7 @@ class MyService : Service() {
             if(getFlameData()=="True"){ //화재가 감지되면 화재발생 문구 출력 및 현재 값 1로 변경
                 contentText="화재 발생!!"
                 currentValue = 1
+                Log.i("flame If : ", "In")
             } else{ //화재가 감지되지 않으면 화재 감지중... 문구 출력 및 현재 값 0으로 변경
                 contentText="화재 감지중..."
                 currentValue = 0
@@ -43,7 +44,7 @@ class MyService : Service() {
                 latestValue=currentValue
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                     val name = "화재감지센서 작동 채널"
-                    val importance = NotificationManager.IMPORTANCE_DEFAULT
+                    val importance = NotificationManager.IMPORTANCE_HIGH
                     val notificationChannel = NotificationChannel("foreground channel", name, importance)
                     val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                     notificationManager.createNotificationChannel(notificationChannel)
@@ -71,7 +72,7 @@ class MyService : Service() {
     }
 
     private fun getFlameData(): String{
-        var flame_value: String = ""
+
         // 화재 감지 값을 가져옴
         APISensor.getService()
             .getSensorValue("flame_detect")
@@ -89,5 +90,6 @@ class MyService : Service() {
             })
         return flame_value
     }
+
 
 }

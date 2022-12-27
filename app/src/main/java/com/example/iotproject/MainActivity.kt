@@ -1,25 +1,39 @@
 package com.example.iotproject
 
-import android.app.TabActivity
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
+import android.os.PowerManager
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.iotproject.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
-
+import android.provider.Settings;
 
 class MainActivity : AppCompatActivity() {
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        val packageName = packageName
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+        } else {    // 메모리 최적화가 되어 있다면, 풀기 위해 설정 화면 띄움.
+            val intent = Intent()
+            intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            intent.data = Uri.parse("package:$packageName")
+            startActivityForResult(intent, 0)
+        }
 
         //Tab과 ViewPager2 연결
         initViewPager()
