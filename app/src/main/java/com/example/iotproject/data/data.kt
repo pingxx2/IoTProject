@@ -10,7 +10,6 @@ data class SensorData(
     val value: String
 )
 
-data class MoodData(
-    @SerializedName("Value")
+data class Dummy(
     val value:String
 )

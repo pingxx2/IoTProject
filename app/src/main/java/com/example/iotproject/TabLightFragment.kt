@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import com.example.iotproject.data.MoodData
+import com.example.iotproject.data.Dummy
 import com.example.iotproject.data.SensorData
 import com.example.iotproject.databinding.FragmentTabLightBinding
 import com.example.iotproject.service.APISensor
@@ -25,8 +25,8 @@ import kotlin.math.*
 class TabLightFragment : Fragment() {
     private var _binding: FragmentTabLightBinding? = null
     private val binding get() = _binding!!
-    var defaultColor : Int = 0
-    var lightValue: String = ""
+    var colorValue : Int = (0xFFFFFFFF - 0x1).toInt()// 컬러 값
+    var brightness: String = "0"// 밝기 값
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +46,9 @@ class TabLightFragment : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 // 값이 변할 때
                 binding.txtBrightnessLight.setText(progress.toString())
-
+                brightness = progress.toString()
                 //서버에 변환된 값 전송
-                setSensorData(convertValue(1, lightValue, progress.toString()))
+                setSensorData(convertValue(brightness, Integer.toHexString(colorValue)))
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -72,55 +72,41 @@ class TabLightFragment : Fragment() {
 
     //ColorPicker 동작함수
     fun openColorPicker() {
-        val colorPicker = AmbilWarnaDialog(requireContext(), defaultColor, object : AmbilWarnaDialog.OnAmbilWarnaListener {
+        val colorPicker = AmbilWarnaDialog(requireContext(), colorValue, object : AmbilWarnaDialog.OnAmbilWarnaListener {
             override fun onCancel(dialog: AmbilWarnaDialog) {
                 //취소
             }
 
             override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
                 //선택
-                defaultColor = color
+                colorValue = color
 
                 //버튼 색 변경
                 val roundDrawable = resources.getDrawable(R.drawable.btn_light_circle)
-                roundDrawable.setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP)
+                roundDrawable.setColorFilter(colorValue, PorterDuff.Mode.SRC_ATOP)
 
                 binding.btnColorChangeLight.background = roundDrawable
-                var color_hex = Integer.toHexString(defaultColor)
-
-                // 전송할 무드등 색상 값
-                Log.d("COLOR_CONVERT", color_hex)
 
                 //서버에 변환된 값 전송
-                setSensorData(convertValue(0, lightValue, color_hex))
+                setSensorData(convertValue(brightness, Integer.toHexString(colorValue)))
             }
         })
         colorPicker.show()
     }
 
-    fun convertValue(type: Int, lightValue: String, changeValue: String): String{
-        var returnValue: String = ""
-        var splitValue = lightValue.split(":")
-
-        if(type==0){ //색상 값 변경
-            returnValue = changeValue + ":" + splitValue[1]
-        } else if(type==1){ //밝기 값 변경
-            returnValue = splitValue[0] + ":" + changeValue
-        }
-        return returnValue
+    fun convertValue(brightness : String, colorValue: String): String{
+        return  colorValue.substring(2) + ":" + brightness      // 무드등 쿼리 조립
     }
 
     private fun setSensorData(requestValue: String) {
         // 무드등 값을 보냄
         APISensor.getService()
             .setMoodValue(requestValue)
-            .enqueue(object : Callback<MoodData> {
-                override fun onResponse(call: Call<MoodData>, response: Response<MoodData>) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                    }
+            .enqueue(object : Callback<Dummy> {
+                override fun onResponse(call: Call<Dummy>, response: Response<Dummy>) {
+
                 }
-                override fun onFailure(call: Call<MoodData>, t: Throwable) {
+                override fun onFailure(call: Call<Dummy>, t: Throwable) {
                     Log.i("isWorking?", "Fail...")
                 }
             })

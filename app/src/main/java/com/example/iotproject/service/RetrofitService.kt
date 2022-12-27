@@ -1,6 +1,6 @@
 package com.example.iotproject.service
 
-import com.example.iotproject.data.MoodData
+import com.example.iotproject.data.Dummy
 import com.example.iotproject.data.SensorData
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -17,7 +17,7 @@ interface SensorDataService{
     @GET("/data/sensor/{dev}")
     fun getSensorValue(@Path("dev") dev: String): Call<SensorData>
     @GET("/data/mood/ctrl/{msg}")
-    fun setMoodValue(@Path("msg") msg: String): Call<MoodData>
+    fun setMoodValue(@Path("msg") msg: String): Call<Dummy>
 }
 
 
