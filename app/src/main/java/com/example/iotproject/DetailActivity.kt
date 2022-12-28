@@ -19,6 +19,8 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.timer
 
 
@@ -28,10 +30,12 @@ class DetailActivity : AppCompatActivity() {
     val tempList: ArrayList<Entry> = ArrayList()
     val humiList: ArrayList<Entry> = ArrayList()
     val dustList: ArrayList<Entry> = ArrayList()
+    lateinit var timer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
 
         //초기화
         for(i in 0..59){
@@ -47,7 +51,7 @@ class DetailActivity : AppCompatActivity() {
         chart_init(binding.chart2Detail, "습도", Color.BLUE, humiList)
         chart_init(binding.chart3Detail, "미세먼지", Color.GREEN, dustList)
 
-        var timer = timer(period=1000){
+        timer = timer(period=1000){
             getSensorData()
         }
 
@@ -55,6 +59,7 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        timer.cancel()
     }
 
     override fun onStop() {
@@ -146,12 +151,13 @@ class DetailActivity : AppCompatActivity() {
                         val data = response.body()
 
                         for(i in 58 downTo 0){
-                            tempList[i+1].data = tempList[i].data
+                            tempList[i+1].y = tempList[i].y
                         }
-                        tempList[0].data = data?.value!!.toFloat()
+                        tempList[0].y = data?.value!!.toFloat()
 
                         runOnUiThread{
                             binding.chart1Detail.notifyDataSetChanged()
+                            binding.chart1Detail.invalidate()
                         }
                     }
                 }
