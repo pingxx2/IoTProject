@@ -1,21 +1,15 @@
 package com.example.iotproject
 
-import android.content.SharedPreferences
+
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebSettings
-import android.webkit.WebView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.load.model.stream.HttpGlideUrlLoader.TIMEOUT
 import com.example.iotproject.databinding.FragmentTabCctvBinding
-import com.github.niqdev.mjpeg.DisplayMode
-import com.github.niqdev.mjpeg.Mjpeg
-import com.github.niqdev.mjpeg.MjpegInputStream
-import com.github.niqdev.mjpeg.MjpegView
 import android.webkit.WebViewClient;
+
 
 
 class TabCctvFragment : Fragment() {
