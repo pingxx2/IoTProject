@@ -37,6 +37,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
         //초기화
         for(i in 0..59){
             tempList.add(Entry(i.toFloat(), 0f))
@@ -51,6 +52,7 @@ class DetailActivity : AppCompatActivity() {
         chart_init(binding.chart2Detail, "습도", Color.BLUE, humiList)
         chart_init(binding.chart3Detail, "미세먼지", Color.GREEN, dustList)
 
+        //1초마다 센서 데이터 불러옴
         timer = timer(period=1000){
             getSensorData()
         }
@@ -149,10 +151,11 @@ class DetailActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     if(response.isSuccessful){
                         val data = response.body()
-
+                        // 기존 데이터를 1칸씩 뒤로 이동시킴
                         for(i in 58 downTo 0){
                             tempList[i+1].y = tempList[i].y
                         }
+                        //기존 데이터중 가장 앞에 있는 값을 최신데이터로 변경
                         tempList[0].y = data?.value!!.toFloat()
 
                         runOnUiThread{
@@ -166,39 +169,53 @@ class DetailActivity : AppCompatActivity() {
                 }
             })
         // 습도를 가져옴
-//        APISensor.getService()
-//            .getSensorValue("HUMI/latest_value")
-//            .enqueue(object : Callback<SensorData> {
-//                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
-//                    if(response.isSuccessful){
-//                        val data = response.body()
-//                        for(i in 0..59){
-//                            humiList[i+1]=humiList[i]
-//                        }
-//                        humiList[0].data = data?.value!!.toFloat()
-//                    }
-//                }
-//                override fun onFailure(call: Call<SensorData>, t: Throwable) {
-//                    Log.i("isWorking?", "Fail...")
-//                }
-//            })
+        APISensor.getService()
+            .getSensorValue("HUMI/latest_value")
+            .enqueue(object : Callback<SensorData> {
+                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
+                    if(response.isSuccessful){
+                        val data = response.body()
+                        // 기존 데이터를 1칸씩 뒤로 이동시킴
+                        for(i in 58 downTo 0){
+                            humiList[i+1].y =humiList[i].y
+                        }
+                        //기존 데이터중 가장 앞에 있는 값을 최신데이터로 변경
+                        humiList[0].y = data?.value!!.toFloat()
+
+                        runOnUiThread{
+                            binding.chart2Detail.notifyDataSetChanged()
+                            binding.chart2Detail.invalidate()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<SensorData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
 
         //미세먼지 가져옴
-//        APISensor.getService()
-//            .getSensorValue("DUST/latest_value")
-//            .enqueue(object : Callback<SensorData>{
-//                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
-//                    if(response.isSuccessful){
-//                        val data = response.body()
-//                        for(i in 0..59){
-//                            dustList[i+1]=dustList[i]
-//                        }
-//                        dustList[0].data = data?.value!!.toFloat()
-//                    }
-//                }
-//                override fun onFailure(call: Call<SensorData>, t: Throwable) {
-//                    Log.i("isWorking?", "Fail...")
-//                }
-//            })
+        APISensor.getService()
+            .getSensorValue("DUST/latest_value")
+            .enqueue(object : Callback<SensorData>{
+                override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
+                    if(response.isSuccessful){
+                        val data = response.body()
+                        // 기존 데이터를 1칸씩 뒤로 이동시킴
+                        for(i in 58 downTo 0){
+                            dustList[i+1].y =dustList[i].y
+                        }
+                        //기존 데이터중 가장 앞에 있는 값을 최신데이터로 변경
+                        dustList[0].y = data?.value!!.toFloat()
+
+                        runOnUiThread{
+                            binding.chart3Detail.notifyDataSetChanged()
+                            binding.chart3Detail.invalidate()
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<SensorData>, t: Throwable) {
+                    Log.i("isWorking?", "Fail...")
+                }
+            })
     }
 }
