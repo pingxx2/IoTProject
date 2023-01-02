@@ -81,18 +81,11 @@ class DetailActivity : AppCompatActivity() {
         tempDataSet.setLineWidth(2f) //라인 굵기
         tempDataSet.setDrawCircleHole(false) //데이터 원 구멍 표시 여부
         tempDataSet.setDrawCircles(false) //데이터 원 표시 여부
-        //tempDataSet.setDrawFilled(true)
-        //tempDataSet.setCircleColor(chartColor) //데이터 원 색상
-        tempDataSet.setCircleRadius(2f) // 데이터 원 반지름
         tempDataSet.setDrawValues(false)
 
         //1-B. 차트 커스텀
         lineChart.setNoDataText("No Data"); //차트 데이터 없음 표시
         lineChart.setNoDataTextColor(Color.BLACK); //차트 데이터 없음 텍스트 색상
-        //lineChart.setBackgsproundColor(Color.BLACK); //차트 배경 색상
-        //lineChart.setDrawGridBackground(true); //격자 그리드 적용
-        //lineChart.setDrawBorders(true); //차트 외곽선 진하게
-        //lineChart.setBorderColor(Color.RED); //차트 외곽선 색상
 
         lineChart.axisLeft.axisMaximum = 200.0f
         lineChart.axisLeft.axisMinimum = 0.0f

@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
 
         //ViewPager, TabLayout 연결
         TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
-            //Log.e("YMC", "ViewPager position: ${position}")
-            //tabLayout.selectTab(tabLayout.getTabAt(2))
 
             when (position) {
                 0 -> {

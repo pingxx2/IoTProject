@@ -16,7 +16,7 @@ class TabCctvFragment : Fragment() {
     private var _binding: FragmentTabCctvBinding? = null
     private val binding get()= _binding!!
 
-    val cctv_url = "http://192.168.35.113/mjpeg/?mode=stream"
+    val cctv_url = "http://server_ip/?mode=stream"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,7 @@ class TabCctvFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var  mWebSettings: WebSettings = binding.wv.settings;
+
         //web view를 이용하여 cctv streaming 연결
         binding.wv.setWebViewClient(WebViewClient())
         mWebSettings.javaScriptEnabled = true //자바스크립트 허용

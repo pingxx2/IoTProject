@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Header
 import retrofit2.http.Path
 
-private val BASE_URL = "http://192.168.35.113:8000/"
+private val BASE_URL = "http://server_ip/"
 
 
 interface SensorDataService{
@@ -18,10 +18,6 @@ interface SensorDataService{
     fun getSensorValue(@Path("dev") dev: String): Call<SensorData>
     @GET("/data/mood/ctrl/{msg}")
     fun setMoodValue(@Path("msg") msg: String): Call<Dummy>
-    @GET("/data/LED/{msg}")
-    fun setLedValue(@Path("msg") msg: String): Call<Dummy>
-    @GET("/data/TV/{msg}")
-    fun setTvValue(@Path("msg") msg: String): Call<Dummy>
     @GET("/data/sensor/set_realtime")
     fun setRealTimeValue(): Call<Dummy>
     @GET("/data/sensor/set_normal")
