@@ -5,4 +5,4 @@
 </br></br>
 
 <h3>개발언어</h3>
-<img src="https://img.shields.io/badge/Kotlin?style=for-the-badge&logo=Kotlin&logoColor=#7F52FF">
+<img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white">
