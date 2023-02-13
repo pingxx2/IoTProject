@@ -9,8 +9,10 @@
 </br></br>
 
 <h3>화면설계</h3>
+
 ![화면설계](https://user-images.githubusercontent.com/103883791/218466154-1edd5e4a-7e06-48a8-bd21-2dd27402c0ea.PNG)
 
 
 <h3>폴더구조</h3>
-<img src="[/uploads/1848994ad25765da30fa8ef3684c67bc/캡처.PNG](https://user-images.githubusercontent.com/103883791/212575685-4ab8f899-6228-430d-b01f-7f12b1c7e35e.PNG)"  width="700" height="370">
+
+![폴더구조](https://user-images.githubusercontent.com/103883791/218467221-079b4245-374f-4ef3-9ddc-53d4ccad7f45.PNG)
