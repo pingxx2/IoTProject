@@ -9,7 +9,7 @@
 </br></br>
 
 <h3>화면설계</h3>
-![화면설계](https://user-images.githubusercontent.com/103883791/218465827-02dea4c7-2cce-4f32-a0b4-71b052484f08.PNG)
+![화면설계](https://user-images.githubusercontent.com/103883791/218466075-834ee161-1c28-4f20-9ed7-c1774caae2b0.PNG)
 
 
 <h3>폴더구조</h3>
